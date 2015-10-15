@@ -49,7 +49,7 @@ public List<Province> loadProvince()
 			Province province = new Province();
 			province.setId(cursor.getInt(cursor.getColumnIndex("province_id")));
 			province.setName(cursor.getString(cursor.getColumnIndex("province_name")));
-			province.setCode(cursor.getInt(cursor.getColumnIndex("province_code")));
+			province.setCode(cursor.getString(cursor.getColumnIndex("province_code")));
 			list.add(province);
 		}while(cursor.moveToNext());
 	}
@@ -65,18 +65,19 @@ values.put("city_name", city.getName());
 values.put("city_code", city.getCode());
 values.put("province_id", city.getProvinceId());
 db.insert("city", null, values);
+values.clear();
 }
 }
 public List<City> loadCity(int province_id)
 {
 	List<City> list = new ArrayList<City>(); 
-	Cursor cursor = db.query("city", null, "province province_id = ?", new String[]{String.valueOf(province_id)}, null, null, null);
+	Cursor cursor = db.query("city", null, "province_id = ?", new String[]{String.valueOf(province_id)}, null, null, null);
 	if (cursor.moveToFirst()) {
 		do {
 		City city = new City();
-		city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+		city.setId(cursor.getInt(cursor.getColumnIndex("city_id")));
 		city.setName(cursor.getString(cursor.getColumnIndex("city_name")));
-		city.setCode(cursor.getInt(cursor.getColumnIndex("city_code")));
+		city.setCode(cursor.getString(cursor.getColumnIndex("city_code")));
 		city.setProvinceId(province_id);
 		list.add(city);
 		} while (cursor.moveToNext());
@@ -97,13 +98,13 @@ public void saveCounty(County county)
 public List<County> loadCounty(int city_id)
 {
 	List<County> list = new ArrayList<County>(); 
-	Cursor cursor = db.query("County", null, "city city_id = ?", new String[]{String.valueOf(city_id)}, null, null, null);
+	Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(city_id)}, null, null, null);
 	if (cursor.moveToFirst()) {
 		do {
 		County county = new County();
-		county.setId(cursor.getInt(cursor.getColumnIndex("id")));
-		county.setName(cursor.getString(cursor.getColumnIndex("city_name")));
-		county.setCode(cursor.getInt(cursor.getColumnIndex("city_code")));
+		county.setId(cursor.getInt(cursor.getColumnIndex("county_id")));
+		county.setName(cursor.getString(cursor.getColumnIndex("county_name")));
+		county.setCode(cursor.getString(cursor.getColumnIndex("county_code")));
 		county.setCityId(city_id);
 		list.add(county);
 		} while (cursor.moveToNext());

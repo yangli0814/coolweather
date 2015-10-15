@@ -3,7 +3,7 @@ package com.weather.app.model;
 public class City {
 	private int city_id;
 	private String city_name;
-	private int  city_code;
+	private String  city_code;
 	private int province_id;
 	public void setId(int id)
 	{
@@ -21,11 +21,11 @@ public class City {
 	{
 		return city_name;
 	}
-	public void setCode(int code)
+	public void setCode(String code)
 	{
 		this.city_code = code;
 	}
-	public int getCode()
+	public String getCode()
 	{
 		return city_code;
 	}
