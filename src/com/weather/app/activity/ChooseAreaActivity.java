@@ -5,7 +5,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +26,6 @@ import com.weather.app.model.County;
 import com.weather.app.model.Province;
 import com.weather.app.util.HttpCallbackListener;
 import com.weather.app.util.HttpUtil;
-
 import com.weather.app.util.Utility;
 
 public class ChooseAreaActivity extends Activity {
@@ -60,9 +62,18 @@ private City selectedCity;
 * 当前选中的级别
 */
 private int currentLevel;
+boolean isFromWeatherActivity;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
+ isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
+SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+if (prefs.getBoolean("city_selected", false)&&!isFromWeatherActivity) {
+Intent intent = new Intent(this, WeatherActivity.class);
+startActivity(intent);
+finish();
+return;
+}
 requestWindowFeature(Window.FEATURE_NO_TITLE);
 setContentView(R.layout.choose_area);
 listView = (ListView) findViewById(R.id.list_view);
@@ -80,7 +91,14 @@ queryCities();
 } else if (currentLevel == LEVEL_CITY) {
 selectedCity = cityList.get(index);
 queryCounties();
-}
+}else if (currentLevel == LEVEL_COUNTY) {
+	String countyCode = countyList.get(index).getCountyCode();
+	Intent intent = new Intent(ChooseAreaActivity.this,
+	WeatherActivity.class);
+	intent.putExtra("county_code", countyCode);
+	startActivity(intent);
+	finish();
+	}
 }
 });
 queryProvinces(); // 加载省级数据
@@ -189,8 +207,7 @@ runOnUiThread(new Runnable() {
 @Override
 public void run() {
 closeProgressDialog();
-Toast.makeText(ChooseAreaActivity.this,
-"加载失败", Toast.LENGTH_SHORT).show();
+Toast.makeText(ChooseAreaActivity.this,"加载失败", Toast.LENGTH_SHORT).show();
 }
 });
 }
@@ -225,7 +242,11 @@ queryCities();
 } else if (currentLevel == LEVEL_CITY) {
 queryProvinces();
 } else {
-finish();
-}
+	if (isFromWeatherActivity) {
+		Intent intent = new Intent(this, WeatherActivity.class);
+		startActivity(intent);
+		}
+		finish();
+		}
 }
 }
