@@ -8,66 +8,69 @@ import com.weather.app.model.County;
 import com.weather.app.model.Province;
 
 public class Utility {
-public synchronized static boolean handleProvincesResponse(CoolWeatherDB coolWeatherDB, String response)
-{
-	if(!TextUtils.isEmpty(response))
-	{
-		String[] allProvince = response.split(",");
-		if(allProvince!=null&&allProvince.length>=0)
-		{
-			for( String p : allProvince)
-			{
-				String[] array = p.split("\\|");
-				Province province = new Province();
-				province.setCode(array[0]);
-				province.setName(array[1]);
-				coolWeatherDB.saveProvince(province);
-			}
-		}
-		return true;
-	}
-	return false;
+/**
+* 解析和处理服务器返回的省级数据
+*/
+public synchronized static boolean handleProvincesResponse(CoolWeatherDB
+coolWeatherDB, String response) {
+if (!TextUtils.isEmpty(response)) {
+String[] allProvinces = response.split(",");
+if (allProvinces != null && allProvinces.length > 0) {
+for (String p : allProvinces) {
+String[] array = p.split("\\|");
+Province province = new Province();
+province.setProvinceCode(array[0]);
+province.setProvinceName(array[1]);
+// 将解析出来的数据存储到Province表
+coolWeatherDB.saveProvince(province);
 }
-public synchronized static boolean handleCityResponse(CoolWeatherDB coolWeatherDB, String response,int province_id)
-{
-	if(!TextUtils.isEmpty(response))
-	{
-		String[] allCity = response.split(",");
-		if(allCity!=null&&allCity.length>=0)
-		{
-			for( String p : allCity)
-			{
-				String[] array = p.split("\\|");
-				City city = new City();
-				city.setCode(array[0]);
-				city.setName(array[1]);
-				city.setProvinceId(province_id);
-				coolWeatherDB.saveCity(city);
-			}
-		}
-		return true;
-	}
-	return false;
+return true;
 }
-public synchronized static boolean handleCountyResponse(CoolWeatherDB coolWeatherDB, String response,int city_id)
-{
-	if(!TextUtils.isEmpty(response))
-	{
-		String[] allCounty = response.split(",");
-		if(allCounty!=null&&allCounty.length>=0)
-		{
-			for( String p : allCounty)
-			{
-				String[] array = p.split("\\|");
-				County county = new County();
-				county.setCode(array[0]);
-				county.setName(array[1]);
-				county.setCityId(city_id);
-				coolWeatherDB.saveCounty(county);
-			}
-		}
-		return true;
-	}
-	return false;
+}
+return false;
+}
+/**
+* 解析和处理服务器返回的市级数据
+*/
+public static boolean handleCitiesResponse(CoolWeatherDB coolWeatherDB,
+String response, int provinceId) {
+if (!TextUtils.isEmpty(response)) {
+String[] allCities = response.split(",");
+if (allCities != null && allCities.length > 0) {
+for (String c : allCities) {
+String[] array = c.split("\\|");
+City city = new City();
+city.setCityCode(array[0]);
+city.setCityName(array[1]);
+city.setProvinceId(provinceId);
+// 将解析出来的数据存储到City表
+coolWeatherDB.saveCity(city);
+}
+return true;
+}
+}
+return false;
+}
+/**
+* 解析和处理服务器返回的县级数据
+*/
+public static boolean handleCountiesResponse(CoolWeatherDB coolWeatherDB,
+String response, int cityId) {
+if (!TextUtils.isEmpty(response)) {
+String[] allCounties = response.split(",");
+if (allCounties != null && allCounties.length > 0) {
+for (String c : allCounties) {
+String[] array = c.split("\\|");
+County county = new County();
+county.setCountyCode(array[0]);
+county.setCountyName(array[1]);
+county.setCityId(cityId);
+// 将解析出来的数据存储到County表
+coolWeatherDB.saveCounty(county);
+}
+return true;
+}
+}
+return false;
 }
 }

@@ -1,40 +1,32 @@
 package com.weather.app.model;
 
 public class City {
-	private int city_id;
-	private String city_name;
-	private String  city_code;
-	private int province_id;
-	public void setId(int id)
-	{
-		this.city_id = id;
-	}
-	public int getId()
-	{
-		return city_id;
-	}
-	public void setName(String name)
-	{
-		this.city_name = name;
-	}
-	public String getName()
-	{
-		return city_name;
-	}
-	public void setCode(String code)
-	{
-		this.city_code = code;
-	}
-	public String getCode()
-	{
-		return city_code;
-	}
-	public void setProvinceId(int id)
-	{
-		this.province_id = id;
-	}
-	public int getProvinceId()
-	{
-		return this.province_id;
-	}
+private int id;
+private String cityName;
+private String cityCode;
+private int provinceId;
+public int getId() {
+return id;
+}
+public void setId(int id) {
+this.id = id;
+}
+public String getCityName() {
+return cityName;
+}
+public void setCityName(String cityName) {
+this.cityName = cityName;
+}
+public String getCityCode() {
+return cityCode;
+}
+public void setCityCode(String cityCode) {
+this.cityCode = cityCode;
+}
+public int getProvinceId() {
+return provinceId;
+}
+public void setProvinceId(int provinceId) {
+this.provinceId = provinceId;
+}
 }
